@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"fmt"
 	"io"
 	"net/http"
 	"os"
@@ -59,8 +60,11 @@ func Upload(w http.ResponseWriter, r *http.Request) {
 
 	ext := filepath.Ext(header.Filename)
 
-	filename := time.Now().UTC().String() + ext
-
+	filename := fmt.Sprintf(
+		"converted_%s%s",
+		time.Now().UTC().Format("20060102_150405"),
+		ext,
+	)
 	output, err := os.Create(filename)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
